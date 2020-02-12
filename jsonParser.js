@@ -7,4 +7,4 @@ function nullParser(input) {
 
 console.log(nullParser('nullabcd'))
 console.log(nullParser('abcdnull'))
-console.log(nullParser('{"null":"John", "age":31, "city":"New York"}'))
+// console.log(nullParser('{"null":"John", "age":31, "city":"New York"}'))
