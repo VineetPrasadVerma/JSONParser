@@ -1,4 +1,4 @@
-function nullParser(input) {
+function nullParser (input) {
   if (input.startsWith('null')) {
     return [null, input.slice(4)]
   }
@@ -9,7 +9,7 @@ function nullParser(input) {
 // console.log(nullParser('abcdnull'))
 // console.log(nullParser('{"null":"John", "age":31, "city":"New York"}'))
 
-function booleanParser(input) {
+function booleanParser (input) {
   if (input.startsWith('true')) {
     return [true, input.slice(4)]
   }
@@ -75,7 +75,7 @@ const arr = [
   '1.3abc'
 ]
 
-function numberParser(str) {
+function numberParser (str) {
   // if (/^[-]?0[\d]+/.test(str)) {
   //   return null
   // }
