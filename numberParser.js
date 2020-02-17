@@ -102,6 +102,8 @@ function numberParser (str) {
   return [matchLength[0], str.slice(matchLength[0].length)]
 }
 
-for (const ele of arr) {
-  console.log(ele + ' -->', numberParser(ele))
-}
+// for (const ele of arr) {
+//   console.log(ele + ' -->', numberParser(ele))
+// }
+
+module.exports = numberParser
