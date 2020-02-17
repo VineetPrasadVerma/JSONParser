@@ -26,7 +26,13 @@ function arrayParser (data) {
     }
   }
 
-  return [ans, data.slice(1)]
+  if (data[0] === ']') {
+    data = data.slice(1)
+    if (data.length === 0) {
+      return [ans, data]
+    }
+  }
+  return null
 }
 
 console.log(arrayParser(data))
