@@ -27,11 +27,12 @@ function stringParser (data) {
       if (specialCharacter[data[1]]) {
         ans.push(specialCharacter[data[1]])
         data = data.slice(2)
-        continue
+        if (data.includes('"')) continue
+        return null
       }
       if (data[1] === 'u') {
         const hexDigits = data.slice(2, 6)
-        if (hexDigits.match(/[a-f|A-F|0-9]{4}/)) {
+        if (hexDigits.match(/[a-fA-F0-9]{4}/)) {
           const actualCharacter = String.fromCodePoint(parseInt(hexDigits, 16))
           if (actualCharacter) {
             data = data.slice(6)
@@ -66,9 +67,9 @@ function stringParser (data) {
     //   }
     // }
   }
-  return [ans, data]
+  return [ans.join(''), data.slice(1)]
 }
 console.log(stringParser(data))
-const t = stringParser(data)[0].join('')
-console.log(t)
+// const t = stringParser(data)[0].join('')
+// console.log(t)
 // console.log([t, 0])
