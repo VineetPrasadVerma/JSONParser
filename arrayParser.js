@@ -12,7 +12,7 @@ function arrayParser (data) {
   data = data.slice(1)
   data = data.trim()
   while (data.length !== 0 && data[0] !== ']') {
-    const valueParserValue = valueParser(data)
+    const valueParserValue = valueParser(data) || arrayParser(data)
     if (!valueParserValue) return null
     else {
       ans.push(valueParserValue[0])
@@ -22,17 +22,18 @@ function arrayParser (data) {
         data = data.slice(1)
         data = data.trim()
         if (data[0] === ']') return null
+      } else {
       }
     }
   }
 
   if (data[0] === ']') {
     data = data.slice(1)
-    if (data.length === 0) {
-      return [ans, data]
-    }
+    return [ans, data]
   }
   return null
 }
 
 console.log(arrayParser(data))
+
+module.exports = arrayParser
