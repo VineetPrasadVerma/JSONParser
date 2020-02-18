@@ -23,14 +23,12 @@ function arrayParser (data) {
         data = data.trim()
         if (data[0] === ']') return null
       } else {
+        if (data[0] !== ']') return null
       }
     }
   }
 
-  if (data[0] === ']') {
-    data = data.slice(1)
-    return [ans, data]
-  }
+  if (data[0] === ']') return [ans, data.slice(1)]
   return null
 }
 
