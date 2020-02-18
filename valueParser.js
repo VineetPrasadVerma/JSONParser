@@ -2,8 +2,8 @@ const nullParser = require('./nullParser')
 const booleanParser = require('./booleanParser')
 const numberParser = require('./numberParser')
 const stringParser = require('./stringParser')
-
-// function valueParser (data) {
+// const arrayParser = require('./arrayParser')
+// console.log(arrayParser)
 //   const nullParserValue = nullParser(data)
 //   if (!nullParserValue) {
 //     const booleanParserValue = booleanParser(data)
