@@ -1,122 +1,41 @@
+// Reading a file
+const fs = require('fs')
+for (let i = 1; i <= 33; i++) {
+  const data = fs.readFileSync(
+    `D:\\Geekskool\\JSONParser\\test\\fail${i}.json`,
+    'utf8'
+  )
+  console.log(i, JSONParser(data.trim()))
+}
+
+// Value Parser
+function valueParser (data) {
+  return (
+    nullParser(data) ||
+    booleanParser(data) ||
+    numberParser(data) ||
+    stringParser(data) ||
+    arrayParser(data) ||
+    objectParser(data) ||
+    null
+  )
+}
+
 // Null Parser
 function nullParser (input) {
   if (input.startsWith('null')) return [null, input.slice(4)]
   return null
 }
 
-console.log(nullParser('nullabcd'))
-// console.log(nullParser('abcdnull'))
-// console.log(nullParser('{"null":"John", "age":31, "city":"New York"}'))
-
 // Boolean Parser
 function booleanParser (input) {
-  return input.startsWith('true')
-    ? [true, input.slice(4)]
-    : input.startsWith('false')
-    ? [false, input.slice(5)]
-    : null
+  if (input.startsWith('true')) return [true, input.slice(4)]
+  if (input.startsWith('false')) return [false, input.slice(5)]
+  return null
 }
-
-console.log(booleanParser('trueCorrect'))
-// console.log(booleanParser('falseWrong'))
-// console.log(booleanParser('CorrectTrue'))
-
-// Number Parser Test Cases
-const arr = [
-  '012',
-  '-0',
-  '0',
-  '-01',
-  '-',
-  '--',
-  '00',
-  '-00',
-  '+21',
-  ' ',
-  '1221',
-  '-1---1',
-  '1001',
-  '-1001',
-  '-231',
-  '123ABC',
-  '123,456',
-  '-213abc,',
-  '-0ABD',
-  '-ABC123',
-  'ABC12',
-  '1.33E+4r66r+++r',
-  '-1.3333e+9uu',
-  '--1.3333e+9uu',
-  '+1.3333e+9uu',
-  '0',
-  '0.0',
-  '-0',
-  '012',
-  '-012',
-  '00',
-  '0e45',
-  '0e45',
-  '0ab',
-  '.err',
-  '-0.1e10',
-  '.12',
-  '0.12',
-  'e12',
-  '.e12',
-  'e+12',
-  '.e+12',
-  '1.e12',
-  '0 ',
-  '1e12',
-  '0.e',
-  '1.3abc'
-]
 
 // Number Parser
 function numberParser (str) {
-  // if (/^[-]?0[\d]+/.test(str)) {
-  //   return null
-  // }
-  // // if (/^[-]?0[\w]+/.test(str)) {
-  // //   const matchLength = str.match(/^[-]?0[\w]/)[0].length
-  // //   return [str.slice(0, matchLength), str.slice(matchLength)]
-  // // }
-  // // if (/^[-]?0$|^[-]?[1-9][0-9]*/.test(str)) {
-  // //   const matchLength = str.match(/^[-]?0$|^[-]?[1-9][0-9]*/)[0].length
-  // //   return [str.slice(0, matchLength), str.slice(matchLength)]
-  // // }
-
-  // if (/^[-]?0[\d]+/.test(str)) {
-  //   return null
-  // }
-  // // if (/^[-]?0[\w]+/.test(str)) {
-  // //   const matchLength = str.match(/^[-]?0[\w]/)[0].length
-  // //   return [str.slice(0, matchLength), str.slice(matchLength)]
-  // // }
-  // // if (/^[-]?0$|^[-]?[1-9][0-9]*/.test(str)) {
-  // //   const matchLength = str.match(/^[-]?0$|^[-]?[1-9][0-9]*/)[0].length
-  // //   return [str.slice(0, matchLength), str.slice(matchLength)]
-  // // }
-
-  // if (/^[-]?0\d+/.test(str)) {
-  //   return null
-  // }
-  // if (
-  //   /^[-]?((0(\.\d+)?(e[+-]?\d+)?)|([1-9]\d*(\.\d+)?)(e[+-]?\d+)?)/i.test(str)
-  // ) {
-  //   const matchLength = str.match(
-  //     /^[-]?((0(\.\d+)?(e[+-]?\d+)?)|([1-9]\d*(\.\d+)?)(e[+-]?\d+)?)/i
-  //   )[0].length
-  //   return [str.slice(0, matchLength), str.slice(matchLength)]
-  // }
-  // return null
-
-  // if (/^[-]?(0|[1-9]\d*)(\.\d+)?(e[+-]?\d+)?/i.test(str)) {
-  //   const matchLength = str.match(/^[-]?(0|[1-9]\d*)(\.\d+)?(e[+-]?\d+)?/i)[0]
-  //     .length
-  //   return [str.slice(0, matchLength), str.slice(matchLength)]
-  // }
-
   if (/^[-]?0\d+/.test(str)) {
     return null
   }
@@ -125,18 +44,7 @@ function numberParser (str) {
   return [matchLength[0], str.slice(matchLength[0].length)]
 }
 
-for (const ele of arr) {
-  console.log(ele + ' -->', numberParser(ele))
-}
-
 // String Parser
-
-const fs = require('fs')
-const data = fs.readFileSync(
-  'D:\\Geekskool\\JSONParser\\inputString.txt',
-  'utf8'
-)
-
 function stringParser (data) {
   const ans = []
   const specialCharacter = {
@@ -149,10 +57,6 @@ function stringParser (data) {
     r: '\r',
     t: '\t'
   }
-
-  // console.log(specialCharacter)
-
-  // console.log(data)
   if (!data.startsWith('"')) return null
   data = data.slice(1)
   while (data.length !== 0 && data[0] !== '"') {
@@ -163,46 +67,68 @@ function stringParser (data) {
         if (data.includes('"')) continue
         return null
       }
-      if (data[1] === 'u') {
-        const hexDigits = data.slice(2, 6)
-        if (hexDigits.match(/[a-fA-F0-9]{4}/)) {
-          const actualCharacter = String.fromCodePoint(parseInt(hexDigits, 16))
-          if (actualCharacter) {
-            data = data.slice(6)
-            ans.push(actualCharacter)
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      } else {
-        return null
-      }
+      if (data[1] !== 'u') return null
+      const hexDigits = data.slice(2, 6)
+      if (!hexDigits.match(/[a-fA-F0-9]{4}/)) return null
+      const actualCharacter = String.fromCodePoint(parseInt(hexDigits, 16))
+      if (!actualCharacter) return null
+      data = data.slice(6)
+      ans.push(actualCharacter)
     }
-
     ans.push(data[0])
     data = data.slice(1)
-
-    // return [ans.join(''), data]
-    // for (let i = 0; i < data.length; i++) {
-    //   if (data[i] === '\\') {
-    //     // console.log(data[i + 1])
-    //     const temp = specialCharacter[data[i + 1]]
-    //     if (temp) {
-    //       ans.push(temp)
-    //       i += 1
-    //     } else {
-    //       return null
-    //     }
-    //   } else {
-    //     ans.push(data[i])
-    //   }
-    // }
   }
   return [ans.join(''), data.slice(1)]
 }
-console.log(stringParser(data))
-// const t = stringParser(data)[0].join('')
-// console.log(t)
-// console.log([t, 0])
+
+// Array Parser
+function arrayParser (data) {
+  const ans = []
+  if (!data.startsWith('[')) return null
+  data = data.slice(1).trim()
+  while (data.length !== 0 && data[0] !== ']') {
+    data = data.trim()
+    const valueParserValue = valueParser(data)
+    if (!valueParserValue) return null
+    ans.push(valueParserValue[0])
+    data = valueParserValue[1].trim()
+    if (data[0] !== ',') break
+    data = data.slice(1).trim()
+    if (data[0] === ']') return null
+  }
+  return data[0] === ']' ? [ans, data.slice(1)] : null
+}
+
+// Object Parser
+function objectParser (data) {
+  const ans = {}
+  if (!data.startsWith('{')) return null
+  data = data.slice(1).trim()
+  while (data.length !== 0 && data[0] !== '}') {
+    data = data.trim()
+
+    const stringParserValue = stringParser(data)
+    if (!stringParserValue) return null
+    const keyData = stringParserValue[0]
+    data = stringParserValue[1].trim()
+    if (data[0] !== ':') return null
+    data = data.slice(1).trim()
+
+    const valueParserValue = valueParser(data)
+    if (!valueParserValue) return null
+    ans[keyData] = valueParserValue[0]
+    data = valueParserValue[1]
+    data = data.trim()
+    if (data[0] !== ',') break
+    data = data.slice(1).trim()
+    if (data[0] === '}') return null
+  }
+  return data[0] === '}' ? [ans, data.slice(1)] : null
+}
+
+// JSON Parser
+function JSONParser (input) {
+  const jsonValue = arrayParser(input) || objectParser(input)
+  if (jsonValue === null || jsonValue[1] !== '') return null
+  return jsonValue[0]
+}
