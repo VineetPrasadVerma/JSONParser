@@ -47,3 +47,4 @@ function objectParser (data) {
 }
 
 console.log(objectParser(data))
+module.exports = objectParser
