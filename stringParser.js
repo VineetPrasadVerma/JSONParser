@@ -30,22 +30,13 @@ function stringParser (data) {
         if (data.includes('"')) continue
         return null
       }
-      if (data[1] === 'u') {
-        const hexDigits = data.slice(2, 6)
-        if (hexDigits.match(/[a-fA-F0-9]{4}/)) {
-          const actualCharacter = String.fromCodePoint(parseInt(hexDigits, 16))
-          if (actualCharacter) {
-            data = data.slice(6)
-            ans.push(actualCharacter)
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      } else {
-        return null
-      }
+      if (!data[1] === 'u') return null
+      const hexDigits = data.slice(2, 6)
+      if (!hexDigits.match(/[a-fA-F0-9]{4}/)) return null
+      const actualCharacter = String.fromCodePoint(parseInt(hexDigits, 16))
+      if (!actualCharacter) return null
+      data = data.slice(6)
+      ans.push(actualCharacter)
     }
 
     ans.push(data[0])
@@ -67,10 +58,10 @@ function stringParser (data) {
     //   }
     // }
   }
-  return [ans.join(''), data.slice(1)]
+  return [ans, ans.join(''), data.slice(1)]
 }
-// console.log(stringParser(data))
-// const t = stringParser(data)[0].join('')
+console.log(stringParser(data))
+// const t = stringParser(data)
 // console.log(t)
 // console.log([t, 0])
 
