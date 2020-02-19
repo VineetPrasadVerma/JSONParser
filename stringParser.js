@@ -30,7 +30,7 @@ function stringParser (data) {
         if (data.includes('"')) continue
         return null
       }
-      if (!data[1] === 'u') return null
+      if (data[1] !== 'u') return null
       const hexDigits = data.slice(2, 6)
       if (!hexDigits.match(/[a-fA-F0-9]{4}/)) return null
       const actualCharacter = String.fromCodePoint(parseInt(hexDigits, 16))
