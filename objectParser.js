@@ -19,7 +19,7 @@ function objectParser (data) {
     if (!stringParserValue) return null
     const keyData = stringParserValue[0]
     data = stringParserValue[1].trim()
-    if (!data[0] === ':') return null
+    if (data[0] !== ':') return null
     data = data.slice(1).trim()
     const valueParserValue = valueParser(data)
     if (!valueParserValue) {
