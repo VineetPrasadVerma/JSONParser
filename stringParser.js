@@ -58,9 +58,9 @@ function stringParser (data) {
     //   }
     // }
   }
-  return [ans, ans.join(''), data.slice(1)]
+  return [ans.join(''), data.slice(1)]
 }
-console.log(stringParser(data))
+// console.log(stringParser(data))
 // const t = stringParser(data)
 // console.log(t)
 // console.log([t, 0])
