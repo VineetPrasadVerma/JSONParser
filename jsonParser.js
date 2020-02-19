@@ -60,6 +60,7 @@ function stringParser (data) {
   if (!data.startsWith('"')) return null
   data = data.slice(1)
   while (data.length !== 0 && data[0] !== '"') {
+    if (data[0] === '\n' || data[0] === '\t') return null
     if (data[0] === '\\') {
       if (specialCharacter[data[1]]) {
         ans.push(specialCharacter[data[1]])
