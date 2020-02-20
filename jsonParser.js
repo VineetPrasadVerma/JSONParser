@@ -46,7 +46,7 @@ function numberParser (str) {
 
 // String Parser
 function stringParser (data) {
-  const ans = []
+  const result = []
   const specialCharacter = {
     '"': '"',
     '\\': '\\',
@@ -63,7 +63,7 @@ function stringParser (data) {
     if (data[0] === '\n' || data[0] === '\t') return null
     if (data[0] === '\\') {
       if (specialCharacter[data[1]]) {
-        ans.push(specialCharacter[data[1]])
+        result.push(specialCharacter[data[1]])
         data = data.slice(2)
         if (data.includes('"')) continue
         return null
@@ -74,35 +74,35 @@ function stringParser (data) {
       const actualCharacter = String.fromCodePoint(parseInt(hexDigits, 16))
       if (!actualCharacter) return null
       data = data.slice(6)
-      ans.push(actualCharacter)
+      result.push(actualCharacter)
     }
-    ans.push(data[0])
+    result.push(data[0])
     data = data.slice(1)
   }
-  return [ans.join(''), data.slice(1)]
+  return [result.join(''), data.slice(1)]
 }
 
 // Array Parser
 function arrayParser (data) {
-  const ans = []
+  const result = []
   if (!data.startsWith('[')) return null
   data = data.slice(1).trim()
   while (data.length !== 0 && data[0] !== ']') {
     data = data.trim()
     const valueParserValue = valueParser(data)
     if (!valueParserValue) return null
-    ans.push(valueParserValue[0])
+    result.push(valueParserValue[0])
     data = valueParserValue[1].trim()
     if (data[0] !== ',') break
     data = data.slice(1).trim()
     if (data[0] === ']') return null
   }
-  return data[0] === ']' ? [ans, data.slice(1)] : null
+  return data[0] === ']' ? [result, data.slice(1)] : null
 }
 
 // Object Parser
 function objectParser (data) {
-  const ans = {}
+  const result = {}
   if (!data.startsWith('{')) return null
   data = data.slice(1).trim()
   while (data.length !== 0 && data[0] !== '}') {
@@ -117,14 +117,14 @@ function objectParser (data) {
 
     const valueParserValue = valueParser(data)
     if (!valueParserValue) return null
-    ans[keyData] = valueParserValue[0]
+    result[keyData] = valueParserValue[0]
     data = valueParserValue[1]
     data = data.trim()
     if (data[0] !== ',') break
     data = data.slice(1).trim()
     if (data[0] === '}') return null
   }
-  return data[0] === '}' ? [ans, data.slice(1)] : null
+  return data[0] === '}' ? [result, data.slice(1)] : null
 }
 
 // JSON Parser
