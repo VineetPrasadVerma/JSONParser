@@ -1,10 +1,7 @@
 // Reading a file
 const fs = require('fs')
 for (let i = 1; i <= 33; i++) {
-  const data = fs.readFileSync(
-    `D:\\Geekskool\\JSONParser\\test\\fail${i}.json`,
-    'utf8'
-  )
+  const data = fs.readFileSync(`JSONParser\\test\\fail${i}.json`, 'utf8')
   console.log(i, JSONParser(data.trim()))
 }
 
