@@ -22,7 +22,8 @@ function stringParser (data) {
   // console.log(data)
   if (!data.startsWith('"')) return null
   data = data.slice(1)
-  while (data.length !== 0 && data[0] !== '"') {
+  while (data[0] !== '"') {
+    if (data[0] === '\n' || data[0] === '\t') return null
     if (data[0] === '\\') {
       if (specialCharacter[data[1]]) {
         ans.push(specialCharacter[data[1]])
@@ -37,10 +38,13 @@ function stringParser (data) {
       if (!actualCharacter) return null
       data = data.slice(6)
       ans.push(actualCharacter)
+      continue
     }
 
     ans.push(data[0])
     data = data.slice(1)
+    if (data.length === 0) return null
+    // console.log(data)
 
     // return [ans.join(''), data]
     // for (let i = 0; i < data.length; i++) {
@@ -60,7 +64,7 @@ function stringParser (data) {
   }
   return [ans.join(''), data.slice(1)]
 }
-// console.log(stringParser(data))
+console.log(stringParser(data))
 // const t = stringParser(data)
 // console.log(t)
 // console.log([t, 0])
