@@ -1,7 +1,7 @@
 // Reading a file
 const fs = require('fs')
-for (let i = 1; i <= 33; i++) {
-  const data = fs.readFileSync(`JSONParser\\test\\fail${i}.json`, 'utf8')
+for (let i = 1; i <= 3; i++) {
+  const data = fs.readFileSync(`JSONParser\\test\\pass${i}.json`, 'utf8')
   console.log(i, JSONParser(data.trim()))
 }
 
@@ -38,7 +38,7 @@ function numberParser (str) {
   }
   const matchLength = str.match(/^[-]?(0|[1-9]\d*)(\.\d+)?(e[+-]?\d+)?/i)
   if (!matchLength) return null
-  return [matchLength[0], str.slice(matchLength[0].length)]
+  return [Number(matchLength[0]), str.slice(matchLength[0].length)]
 }
 
 // String Parser
@@ -56,7 +56,7 @@ function stringParser (data) {
   }
   if (!data.startsWith('"')) return null
   data = data.slice(1)
-  while (data.length !== 0 && data[0] !== '"') {
+  while (data[0] !== '"') {
     if (data[0] === '\n' || data[0] === '\t') return null
     if (data[0] === '\\') {
       if (specialCharacter[data[1]]) {
@@ -72,25 +72,28 @@ function stringParser (data) {
       if (!actualCharacter) return null
       data = data.slice(6)
       result.push(actualCharacter)
+      continue
     }
     result.push(data[0])
     data = data.slice(1)
+    if (data.length === 0) return null
   }
   return [result.join(''), data.slice(1)]
 }
 
 // Array Parser
 function arrayParser (data) {
-  const result = []
   if (!data.startsWith('[')) return null
-  data = data.slice(1).trim()
-  while (data.length !== 0 && data[0] !== ']') {
+  const result = []
+  data = data.slice(1)
+  while (data[0] !== ']') {
     data = data.trim()
+    if (data[0] === ']') break
     const valueParserValue = valueParser(data)
     if (!valueParserValue) return null
     result.push(valueParserValue[0])
     data = valueParserValue[1].trim()
-    if (data[0] !== ',') break
+    if (!(data[0] === ',')) break
     data = data.slice(1).trim()
     if (data[0] === ']') return null
   }
